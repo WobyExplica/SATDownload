@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>SAT Download · Descarga masiva de CFDI</title>
-<meta name="description" content="Descarga todas tus facturas del SAT en automático y obtén DIOT, papel de trabajo de IVA e ISR, revisión de deducibilidad y declaración anual. Sin mensualidades, con tus datos en tu PC.">
-<meta property="og:title" content="SAT Download · Descarga masiva de CFDI">
-<meta property="og:description" content="Tus facturas del SAT, revisadas y listas para declarar. Sin mensualidades y con el código fuente incluido.">
+<title>SAT Download · Woby Explica</title>
+<meta name="description" content="Hola, soy Woby. Te comparto SAT Download: descarga todas tus facturas del SAT y revísalas con tablero, DIOT, papel de trabajo, deducibilidad y declaración anual. Tú decides con cuánto me apoyas.">
+<meta property="og:title" content="SAT Download · Una herramienta de Woby Explica">
+<meta property="og:description" content="Descarga y revisa todas tus facturas del SAT. Sin mensualidades, con tus datos en tu PC y el código incluido. Apóyame con lo que quieras, desde 5 USD.">
 <meta property="og:image" content="img/01-tablero.png">
 <link rel="icon" type="image/png" href="img/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,37 +19,42 @@
   const CONFIG = {
     videoYoutube: "",          // ID del video de YouTube, p. ej. "dQw4w9WgXcQ" (lo que va después de watch?v=)
     canalYoutube: "",          // Enlace a tu canal, p. ej. "https://www.youtube.com/@WobyExplica"
+    foto: "",                  // Tu foto o avatar, p. ej. "img/woby.jpg" (cuadrada). Vacío = círculo con "W"
     clabe: "",                 // Tu CLABE interbancaria (18 dígitos)
     correo: "",                // Correo para recibir los comprobantes
-    montoMxn: "",              // Monto en pesos a transferir, p. ej. "95"
+    tipoCambio: 18.5,          // Pesos por dólar para mostrar el equivalente en MXN (0 = no mostrarlo)
+    montos: [5, 7, 10, 15],    // Apoyos sugeridos en USD (el primero es el mínimo)
     tiempoEntrega: "en menos de 24 horas"   // Cuándo envías el enlace de descarga
   };
 </script>
 
 <style>
-/* Página de producto: franja azul del programa arriba, capturas reales como protagonistas, compra al final. */
+/* Página personal de Woby: tono de amigo, herramienta al centro, apoyo voluntario al final. */
 :root {
-  --fondo: #f4f7fb;
+  --fondo: #f6f8fb;
   --superficie: #ffffff;
   --tinta: #13263b;
-  --suave: #57697e;
-  --linea: #d8e1eb;
+  --suave: #56687d;
+  --linea: #dbe3ec;
   --azul: #1f4e79;
   --azul-hondo: #163a5c;
-  --azul-claro: #e2ecf6;
+  --azul-claro: #e4edf6;
   --verde: #15803d;
-  --verde-claro: #e2f3e7;
+  --verde-vivo: #22c55e;
+  --verde-claro: #e3f4e8;
+  --calido: #fff6e6;
+  --calido-borde: #f3d9a4;
   --sobre-azul: #ffffff;
-  --sobre-azul-suave: #c7d8ea;
+  --sobre-azul-suave: #c9d9ea;
   --f-titulo: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --f-texto: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
   --f-dato: "IBM Plex Mono", Consolas, monospace;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --fondo: #0c1520; --superficie: #132131; --tinta: #e3ebf4; --suave: #9db0c4; --linea: #24364a;
-    --azul: #2a64a0; --azul-hondo: #0f2a45; --azul-claro: #16304a; --verde: #4ade80; --verde-claro: #12331f;
-    --sobre-azul: #ffffff; --sobre-azul-suave: #b9cde2; color-scheme: dark;
+    --fondo: #0c1520; --superficie: #132131; --tinta: #e3ebf4; --suave: #9fb2c6; --linea: #24364a;
+    --azul: #2a64a0; --azul-hondo: #0f2a45; --azul-claro: #17304a; --verde: #4ade80; --verde-claro: #12331f;
+    --calido: #2a2214; --calido-borde: #5a4620; color-scheme: dark;
   }
 }
 * { box-sizing: border-box; }
@@ -59,117 +64,159 @@ img { max-width: 100%; height: auto; display: block; }
 a { color: inherit; }
 h1, h2, h3 { font-family: var(--f-titulo); line-height: 1.12; text-wrap: balance; margin: 0; }
 p { margin: 0; }
+[id] { scroll-margin-top: 72px; }
 .ancho { max-width: 1120px; margin: 0 auto; padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px)); }
 .seccion { padding-block: 72px; }
 .seccion h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 800; }
+.blanca { background: var(--superficie); }
 .intro { color: var(--suave); max-width: 62ch; margin-top: 12px; }
-.etiqueta { font: 500 12px var(--f-dato); letter-spacing: .1em; text-transform: uppercase; color: var(--verde); }
+.etiqueta { display: block; font: 500 12px var(--f-dato); letter-spacing: .1em; text-transform: uppercase; color: var(--verde); margin-bottom: 8px; }
 .boton {
-  display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 600; border-radius: 10px;
-  padding: 13px 20px; background: var(--verde); color: #fff; border: 0; cursor: pointer; font-size: 16px;
+  display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 600; border-radius: 999px;
+  padding: 13px 22px; background: var(--verde-vivo); color: #0b2a16; border: 0; cursor: pointer; font-size: 16px;
 }
-.boton:hover { filter: brightness(1.08); }
-.boton.claro { background: transparent; color: var(--sobre-azul); box-shadow: inset 0 0 0 1px var(--sobre-azul-suave); }
-:focus-visible { outline: 3px solid var(--verde); outline-offset: 3px; }
+.boton:hover { filter: brightness(1.06); }
+.boton.claro { background: transparent; color: var(--sobre-azul); box-shadow: inset 0 0 0 1.5px var(--sobre-azul-suave); }
+:focus-visible { outline: 3px solid var(--verde-vivo); outline-offset: 3px; }
 
 /* Encabezado */
 header.barra { position: sticky; top: 0; z-index: 20; background: var(--azul-hondo); color: var(--sobre-azul); padding-top: env(safe-area-inset-top, 0px); }
 header.barra .ancho { display: flex; align-items: center; gap: 18px; min-height: 62px; }
 .marca { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 800 19px var(--f-titulo); }
 .marca img { width: 34px; height: 34px; }
+.marca small { font: 500 13px var(--f-texto); color: var(--sobre-azul-suave); }
 nav.menu { margin-left: auto; display: flex; gap: 18px; font-size: 15px; }
 nav.menu a { text-decoration: none; color: var(--sobre-azul-suave); }
 nav.menu a:hover { color: var(--sobre-azul); }
-header .boton { padding: 9px 14px; font-size: 14px; }
-@media (max-width: 760px) { nav.menu { display: none; } header .boton { margin-left: auto; } }
+header .boton { padding: 8px 16px; font-size: 14px; }
+@media (max-width: 820px) { nav.menu { display: none; } header .boton { margin-left: auto; } .marca small { display: none; } }
 
 /* Portada */
-.portada { background: linear-gradient(180deg, var(--azul-hondo), var(--azul)); color: var(--sobre-azul); padding-block: 64px 0; overflow: hidden; }
-.portada .ancho { display: grid; gap: 28px; }
-.portada h1 { font-size: clamp(36px, 6vw, 64px); font-weight: 800; letter-spacing: -.015em; max-width: 17ch; }
-.portada .bajada { font-size: clamp(17px, 2.2vw, 20px); color: var(--sobre-azul-suave); max-width: 58ch; }
+.portada { background: linear-gradient(180deg, var(--azul-hondo), var(--azul)); color: var(--sobre-azul); padding-block: 56px 0; overflow: hidden; }
+.portada .ancho { display: grid; gap: 24px; }
+.saludo { display: flex; align-items: center; gap: 14px; }
+.avatar { width: 64px; height: 64px; border-radius: 50%; flex: none; background: var(--verde-vivo); color: #0b2a16; display: grid; place-items: center; font: 800 30px var(--f-titulo); overflow: hidden; box-shadow: 0 0 0 4px rgba(255,255,255,.18); }
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.saludo p { font-size: 18px; color: var(--sobre-azul-suave); }
+.saludo p b { color: var(--sobre-azul); font-weight: 600; }
+.portada h1 { font-size: clamp(34px, 5.6vw, 60px); font-weight: 800; letter-spacing: -.015em; max-width: 19ch; }
+.portada .bajada { font-size: clamp(17px, 2.2vw, 20px); color: var(--sobre-azul-suave); max-width: 60ch; }
+.portada .bajada b { color: var(--sobre-azul); font-weight: 600; }
 .portada .acciones { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-.sellos { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 14px; color: var(--sobre-azul-suave); }
-.sellos span::before { content: "✓ "; color: #86efac; font-weight: 700; }
-.ventana { margin-top: 18px; border-radius: 12px 12px 0 0; overflow: hidden; box-shadow: 0 -2px 0 rgba(255,255,255,.08), 0 30px 60px rgba(0,0,0,.35); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips span { font-size: 14px; padding: 5px 12px; border-radius: 999px; background: rgba(255,255,255,.1); color: var(--sobre-azul); }
+.chips span::before { content: "✓ "; color: #86efac; font-weight: 700; }
+.ventana { margin-top: 16px; border-radius: 12px 12px 0 0; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,.35); }
+
+/* ¿Te suena? */
+.dolores { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 28px; }
+.dolor { background: var(--superficie); border: 1px solid var(--linea); border-radius: 14px; padding: 22px; display: grid; gap: 10px; align-content: start; }
+.dolor h3 { font-size: 19px; font-weight: 800; }
+.dolor p { color: var(--suave); font-size: 15px; }
+.dolor .alivio { color: var(--tinta); font-size: 15px; padding-top: 10px; border-top: 1px dashed var(--linea); }
+.dolor .alivio::before { content: "→ "; color: var(--verde); font-weight: 700; }
+
+/* Pasos */
+.tres { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 28px; counter-reset: p; }
+.tres div { counter-increment: p; display: grid; gap: 6px; align-content: start; padding: 4px 0 0; }
+.tres div::before { content: counter(p); font: 800 44px/1 var(--f-titulo); color: var(--verde); }
+.tres b { font: 800 20px var(--f-titulo); }
+.tres p { color: var(--suave); font-size: 15px; }
 
 /* Video */
-.video { background: var(--superficie); border-bottom: 1px solid var(--linea); }
-.marco-video { margin-top: 28px; aspect-ratio: 16 / 9; max-width: 100%; border-radius: 14px; overflow: hidden; background: var(--azul-hondo); display: grid; place-items: center; }
+.marco-video { margin-top: 28px; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: var(--azul-hondo); display: grid; place-items: center; }
 .marco-video iframe { width: 100%; height: 100%; border: 0; }
 @media (max-width: 600px) { .marco-video:has(.pronto) { aspect-ratio: auto; } }
-[id] { scroll-margin-top: 72px; }
-.pronto { color: var(--sobre-azul); text-align: center; padding: 24px; display: grid; gap: 10px; justify-items: center; }
+.pronto { color: var(--sobre-azul); text-align: center; padding: 28px; display: grid; gap: 10px; justify-items: center; }
 .pronto img { width: 72px; height: 72px; }
 .pronto p { color: var(--sobre-azul-suave); }
 .enlace-video { margin-top: 16px; }
 .enlace-video a { color: var(--azul); font-weight: 600; }
+@media (prefers-color-scheme: dark) { .enlace-video a { color: var(--verde); } }
 
-/* Ventajas */
-.ventajas { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 32px; }
-.ventaja { background: var(--superficie); border: 1px solid var(--linea); border-radius: 12px; padding: 20px; display: grid; gap: 6px; align-content: start; }
-.ventaja b { font: 800 18px var(--f-titulo); }
-.ventaja p { color: var(--suave); font-size: 15px; }
-.ventaja .dato { font: 500 13px var(--f-dato); color: var(--verde); }
+/* Explorador de herramientas */
+.explorador { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 24px; margin-top: 32px; align-items: start; }
+.pestanas { display: grid; gap: 4px; }
+.pestanas button {
+  all: unset; box-sizing: border-box; cursor: pointer; display: flex; gap: 12px; align-items: baseline; padding: 11px 14px; border-radius: 10px;
+  font-weight: 600; font-size: 15px; color: var(--suave); width: 100%;
+}
+.pestanas button span { font: 500 12px var(--f-dato); color: var(--suave); opacity: .8; }
+.pestanas button:hover { background: var(--azul-claro); color: var(--tinta); }
+.pestanas button[aria-selected="true"] { background: var(--azul-hondo); color: #fff; }
+.pestanas button[aria-selected="true"] span { color: #86efac; opacity: 1; }
+.pestanas button:focus-visible { outline: 3px solid var(--verde-vivo); outline-offset: 1px; }
+.panel { background: var(--superficie); border: 1px solid var(--linea); border-radius: 16px; overflow: hidden; }
+.panel[hidden] { display: none; }
+.panel .texto { padding: 24px 26px 20px; display: grid; gap: 10px; }
+.panel h3 { font-size: clamp(22px, 3vw, 28px); font-weight: 800; }
+.panel p { color: var(--suave); }
+.panel ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 15px; }
+.panel .captura { all: unset; display: block; cursor: zoom-in; background: var(--azul-claro); border-top: 1px solid var(--linea); width: 100%; }
+.panel .captura img { margin: 0 auto; }
+.panel .captura:focus-visible { outline: 3px solid var(--verde-vivo); outline-offset: -3px; }
+.panel .lupa { display: block; text-align: right; font-size: 13px; color: var(--suave); padding: 6px 12px; }
+@media (max-width: 860px) {
+  .explorador { grid-template-columns: 1fr; }
+  .pestanas { display: flex; overflow-x: auto; gap: 6px; padding-bottom: 6px; scrollbar-width: thin; }
+  .pestanas button { width: auto; white-space: nowrap; border: 1px solid var(--linea); border-radius: 999px; padding: 8px 14px; }
+  .pestanas button span { display: none; }
+}
 
-/* Funciones */
-.funciones { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-top: 32px; }
-.funcion { background: var(--superficie); border: 1px solid var(--linea); border-radius: 12px; padding: 22px; display: grid; gap: 10px; align-content: start; }
-.funcion h3 { font-size: 21px; font-weight: 800; color: var(--azul); }
-@media (prefers-color-scheme: dark) { .funcion h3 { color: var(--tinta); } }
-.funcion ul { margin: 0; padding-left: 18px; display: grid; gap: 5px; color: var(--suave); font-size: 15px; }
-.funcion li b { color: var(--tinta); font-weight: 600; }
-
-/* Pantallas */
-.galeria { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 32px; }
-.galeria figure { margin: 0; background: var(--superficie); border: 1px solid var(--linea); border-radius: 12px; overflow: hidden; }
-.galeria button { all: unset; cursor: zoom-in; display: block; width: 100%; }
-.galeria button:focus-visible { outline: 3px solid var(--verde); outline-offset: -3px; }
-.galeria img { aspect-ratio: 16 / 10; object-fit: cover; object-position: top left; width: 100%; border-bottom: 1px solid var(--linea); }
-.galeria figcaption { padding: 12px 16px; font-size: 15px; display: grid; gap: 2px; }
-.galeria figcaption b { font-weight: 600; }
-.galeria figcaption span { color: var(--suave); font-size: 14px; }
-dialog.visor { border: 0; padding: 0; background: transparent; max-width: min(1280px, 96vw); }
-dialog.visor::backdrop { background: rgba(6, 14, 24, .86); }
-dialog.visor img { border-radius: 10px; max-height: 86vh; width: auto; margin: 0 auto; }
-dialog.visor p { color: #e3ebf4; text-align: center; margin-top: 10px; font-size: 15px; }
-dialog.visor button { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,.6); color: #fff; border: 0; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-size: 15px; }
+/* Y además */
+.extras { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 24px; }
+.extra { background: var(--superficie); border: 1px solid var(--linea); border-radius: 12px; padding: 14px 16px; display: grid; gap: 2px; }
+.extra b { font-weight: 600; font-size: 15px; }
+.extra span { color: var(--suave); font-size: 14px; }
 
 /* Para quién */
-.perfiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-top: 32px; }
-.perfil { border-top: 4px solid var(--verde); background: var(--superficie); border-radius: 0 0 12px 12px; padding: 22px; display: grid; gap: 8px; align-content: start; }
+.perfiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-top: 28px; }
+.perfil { border-top: 4px solid var(--verde-vivo); background: var(--fondo); border-radius: 0 0 12px 12px; padding: 22px; display: grid; gap: 8px; align-content: start; }
 .perfil h3 { font-size: 21px; font-weight: 800; }
 .perfil p { color: var(--suave); font-size: 15px; }
 
-/* Compra */
-.compra { background: var(--azul-hondo); color: var(--sobre-azul); }
-.compra .rejilla { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 32px; margin-top: 32px; align-items: start; }
-@media (max-width: 860px) { .compra .rejilla { grid-template-columns: 1fr; } }
-.precio { background: var(--azul); border-radius: 16px; padding: 28px; display: grid; gap: 14px; }
-.precio .cifra { font: 800 clamp(56px, 9vw, 84px)/1 var(--f-titulo); }
-.precio .cifra small { font-size: .35em; font-weight: 600; color: var(--sobre-azul-suave); margin-left: 6px; }
-.precio .tachado { color: var(--sobre-azul-suave); font-size: 15px; }
-.precio .tachado s { opacity: .8; }
-.precio ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; color: var(--sobre-azul-suave); font-size: 15px; }
+/* Apoyo */
+.apoyo { background: var(--azul-hondo); color: var(--sobre-azul); }
+.carta { background: var(--calido); color: var(--tinta); border: 1px solid var(--calido-borde); border-radius: 16px; padding: 26px 28px; display: grid; gap: 12px; max-width: 760px; margin-top: 28px; }
+.carta p { font-size: 17px; }
+.carta .firma { font-family: var(--f-titulo); font-weight: 800; font-size: 20px; }
+.rejilla { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 28px; margin-top: 28px; align-items: start; }
+@media (max-width: 860px) { .rejilla { grid-template-columns: 1fr; } }
+.montos { background: var(--azul); border-radius: 16px; padding: 24px; display: grid; gap: 14px; }
+.montos h3 { font-size: 20px; font-weight: 800; }
+.opciones { display: flex; flex-wrap: wrap; gap: 8px; }
+.opciones button { cursor: pointer; border: 1.5px solid rgba(255,255,255,.35); background: transparent; color: #fff; border-radius: 999px; padding: 10px 18px; font: 800 18px var(--f-titulo); }
+.opciones button[aria-pressed="true"] { background: var(--verde-vivo); border-color: var(--verde-vivo); color: #0b2a16; }
+.elegido { font: 800 clamp(44px, 8vw, 64px)/1 var(--f-titulo); }
+.elegido small { font-size: .36em; font-weight: 600; color: var(--sobre-azul-suave); margin-left: 6px; }
+.montos .nota { color: var(--sobre-azul-suave); font-size: 15px; }
+.montos ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; color: var(--sobre-azul-suave); font-size: 15px; }
 .pasos { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; counter-reset: paso; }
-.pasos li { counter-increment: paso; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 12px; padding: 18px 18px 18px 62px; position: relative; display: grid; gap: 8px; }
-.pasos li::before { content: counter(paso); position: absolute; left: 18px; top: 16px; width: 30px; height: 30px; border-radius: 50%; background: var(--verde); color: #fff; font: 800 16px/30px var(--f-titulo); text-align: center; }
+.pasos li { counter-increment: paso; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 14px; padding: 18px 18px 18px 62px; position: relative; display: grid; gap: 8px; }
+.pasos li::before { content: counter(paso); position: absolute; left: 18px; top: 16px; width: 30px; height: 30px; border-radius: 50%; background: var(--verde-vivo); color: #0b2a16; font: 800 16px/30px var(--f-titulo); text-align: center; }
 .pasos h3 { font-size: 19px; font-weight: 800; }
 .pasos p { color: var(--sobre-azul-suave); font-size: 15px; }
+.pasos p b { color: #fff; }
 .dato-copiable { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .dato-copiable code { font: 500 clamp(15px, 2.6vw, 19px) var(--f-dato); background: rgba(0,0,0,.25); padding: 8px 12px; border-radius: 8px; letter-spacing: .04em; overflow-wrap: anywhere; color: #fff; }
 .dato-copiable code.provisional { color: #fcd34d; font-style: italic; letter-spacing: 0; }
-.dato-copiable button { background: #ffffff; color: #163a5c; border: 0; border-radius: 8px; padding: 8px 12px; font: 600 14px var(--f-texto); cursor: pointer; }
-.copiado { color: #86efac; font-size: 14px; min-height: 1.2em; }
-.provisional { color: #fcd34d; font-style: italic; }
+.dato-copiable button { background: #fff; color: #163a5c; border: 0; border-radius: 8px; padding: 8px 12px; font: 600 14px var(--f-texto); cursor: pointer; }
+.copiado { color: #86efac; font-size: 14px; min-height: 1.2em; margin-top: 12px; }
 
-/* Requisitos y preguntas */
+/* Preguntas */
 .dos { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; margin-top: 28px; }
 .lista-simple { margin: 12px 0 0; padding-left: 20px; display: grid; gap: 6px; color: var(--suave); }
 details { background: var(--superficie); border: 1px solid var(--linea); border-radius: 10px; padding: 14px 18px; }
 details + details { margin-top: 10px; }
 summary { cursor: pointer; font-weight: 600; }
 details p { color: var(--suave); margin-top: 8px; font-size: 15px; }
+
+/* Visor */
+dialog.visor { border: 0; padding: 0; background: transparent; max-width: min(1400px, 96vw); }
+dialog.visor::backdrop { background: rgba(6, 14, 24, .88); }
+dialog.visor img { border-radius: 10px; max-height: 86vh; width: auto; margin: 0 auto; }
+dialog.visor p { color: #e3ebf4; text-align: center; margin-top: 10px; font-size: 15px; }
+dialog.visor button { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,.6); color: #fff; border: 0; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-size: 15px; }
 
 footer { background: var(--superficie); border-top: 1px solid var(--linea); padding-block: 36px calc(36px + env(safe-area-inset-bottom, 0px)); font-size: 14px; color: var(--suave); }
 footer .ancho { display: grid; gap: 10px; }
@@ -181,186 +228,161 @@ footer .marca { color: var(--tinta); }
 
 <header class="barra">
   <div class="ancho">
-    <a class="marca" href="#inicio"><img src="img/logo.png" alt="" width="34" height="34">SAT Download</a>
+    <a class="marca" href="#inicio"><img src="img/logo.png" alt="" width="34" height="34">SAT Download <small>de Woby Explica</small></a>
     <nav class="menu" aria-label="Secciones">
-      <a href="#video">Video</a><a href="#funciones">Funciones</a><a href="#pantallas">Pantallas</a><a href="#preguntas">Preguntas</a>
+      <a href="#como">Cómo funciona</a><a href="#herramientas">Herramientas</a><a href="#video">Video</a><a href="#preguntas">Preguntas</a>
     </nav>
-    <a class="boton" href="#comprar">Obtenerlo</a>
+    <a class="boton" href="#apoyo">Lo quiero</a>
   </div>
 </header>
 
 <main id="inicio">
   <section class="portada">
     <div class="ancho">
-      <span class="etiqueta" style="color:#86efac">Para contadores, pymes y personas físicas</span>
-      <h1>Todas tus facturas del SAT, revisadas y listas para declarar</h1>
-      <p class="bajada">Descarga tus CFDI en automático con tu e.firma y obtén tablero, DIOT, papel de trabajo de IVA e ISR, revisión de deducibilidad y declaración anual. Un programa para Windows que es tuyo: sin mensualidades y con tus datos en tu computadora.</p>
+      <div class="saludo">
+        <div class="avatar" id="avatar" aria-hidden="true">W</div>
+        <p>¡Hola! Soy <b>Woby</b>, de <b>Woby Explica</b> 👋</p>
+      </div>
+      <h1>Hoy te comparto la herramienta que uso para no pelearme con el SAT</h1>
+      <p class="bajada">Se llama <b>SAT Download</b>. Descarga solita todas tus facturas con tu e.firma y te las deja revisadas: tablero, DIOT, papel de trabajo de IVA e ISR, deducibilidad y declaración anual. Es un programa para tu computadora: <b>sin mensualidades</b>, con <b>tus datos en tu PC</b> y con el <b>código incluido</b>. Tú decides con cuánto me apoyas.</p>
       <div class="acciones">
-        <a class="boton" href="#comprar">Quiero el paquete completo</a>
-        <a class="boton claro" href="#video">Ver cómo funciona</a>
+        <a class="boton" href="#apoyo">Quiero la herramienta</a>
+        <a class="boton claro" href="#herramientas">Ver qué hace</a>
       </div>
-      <div class="sellos"><span>Sin mensualidades</span><span>Varios RFC</span><span>Datos en tu PC</span><span>Código fuente incluido</span></div>
+      <div class="chips"><span>Windows 10 y 11</span><span>Varios RFC</span><span>Sin mensualidades</span><span>Datos en tu PC</span><span>Código incluido</span></div>
       <img class="ventana" src="img/01-tablero.png" alt="Tablero de SAT Download con ingresos, gastos, IVA, gráfica mensual, principales clientes y avisos" width="1382" height="736">
-    </div>
-  </section>
-
-  <section class="video seccion" id="video">
-    <div class="ancho">
-      <span class="etiqueta">Video</span>
-      <h2>Míralo funcionar en 12 minutos</h2>
-      <p class="intro">Un recorrido por cada pantalla y por los casos en los que más tiempo ahorra.</p>
-      <div class="marco-video" id="marco-video">
-        <div class="pronto">
-          <img src="img/logo.png" alt="" width="72" height="72">
-          <h3>El video estará disponible muy pronto</h3>
-          <p>Mientras tanto, mira las pantallas más abajo.</p>
-        </div>
-      </div>
-      <p class="enlace-video" id="enlace-video" hidden><a href="#" target="_blank" rel="noopener">Ver en YouTube ↗</a></p>
     </div>
   </section>
 
   <section class="seccion">
     <div class="ancho">
-      <span class="etiqueta">Por qué SAT Download</span>
-      <h2>Lo que otros te cobran cada mes, aquí es tuyo</h2>
-      <div class="ventajas">
-        <div class="ventaja"><span class="dato">1 pago</span><b>Sin mensualidades</b><p>Pagas una vez y el programa es tuyo, sin suscripciones ni cobros recurrentes.</p></div>
-        <div class="ventaja"><span class="dato">Multi-RFC</span><b>Todos tus clientes</b><p>Registra varios RFC y cambia entre ellos en un clic. Ideal para despachos.</p></div>
-        <div class="ventaja"><span class="dato">100% local</span><b>Tus datos en tu PC</b><p>Nada se sube a la nube de nadie. Tu e.firma se guarda cifrada en tu computadora.</p></div>
-        <div class="ventaja"><span class="dato">&lt; 30 s</span><b>Rápido de verdad</b><p>Un paquete con más de 20 mil facturas se procesa en menos de medio minuto.</p></div>
-        <div class="ventaja"><span class="dato">C# · .NET</span><b>Código incluido</b><p>Recibes el código fuente completo para revisarlo o adaptarlo a tu despacho.</p></div>
+      <span class="etiqueta">¿Te suena?</span>
+      <h2>Lo hice porque me pasaba lo mismo que a ti</h2>
+      <div class="dolores">
+        <div class="dolor">
+          <h3>¿Bajas las facturas una por una del portal?</h3>
+          <p>Y cada mes es lo mismo: entrar, filtrar, descargar, descomprimir, acomodar…</p>
+          <p class="alivio">Le dices qué periodo quieres y él solo las baja. Hasta puedes programarlo para que lo haga cada semana.</p>
+        </div>
+        <div class="dolor">
+          <h3>¿Llega el día 17 y la DIOT no está lista?</h3>
+          <p>Armar el IVA pagado por proveedor en Excel se lleva horas, y siempre falta un pago.</p>
+          <p class="alivio">La DIOT y el papel de trabajo de IVA e ISR salen en segundos, con los pagos de facturas PPD ya considerados.</p>
+        </div>
+        <div class="dolor">
+          <h3>¿Te enteras tarde de que un gasto no se deduce?</h3>
+          <p>Pagado en efectivo, con uso S01, de un proveedor en la lista negra… y ya pasó el mes.</p>
+          <p class="alivio">La revisión de deducibilidad te dice cuál, por qué y a qué proveedor reclamarle.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="seccion" id="funciones" style="background:var(--superficie)">
+  <section class="seccion blanca" id="como">
     <div class="ancho">
-      <span class="etiqueta">Funciones</span>
-      <h2>Desde la descarga hasta la declaración</h2>
-      <div class="funciones">
-        <article class="funcion">
-          <h3>Descargas</h3>
-          <ul>
-            <li><b>Emitidas y recibidas</b>, en XML o Metadata, por periodo o por UUID.</li>
-            <li><b>Periodos largos</b> divididos en automático según los límites del SAT.</li>
-            <li><b>Descargas programadas</b> diarias, semanales o mensuales.</li>
-            <li><b>Constancias de retenciones</b> e importación de XML desde carpetas o ZIP.</li>
-            <li><b>Conciliación</b> Metadata contra XML para pedir lo que falta.</li>
-          </ul>
-        </article>
-        <article class="funcion">
-          <h3>Comprobantes</h3>
-          <ul>
-            <li><b>Tablero</b> con comparación contra el año anterior y avisos.</li>
-            <li><b>Consulta</b> con filtros, totales y exportación a Excel.</li>
-            <li><b>PDF</b> de facturas, pagos, notas de crédito y nómina.</li>
-            <li><b>Validación de estatus</b> en el SAT, alertas de cancelación y validación del sello digital.</li>
-            <li><b>Facturas PPD</b> por cobrar y por pagar, con antigüedad de saldos.</li>
-          </ul>
-        </article>
-        <article class="funcion">
-          <h3>Impuestos</h3>
-          <ul>
-            <li><b>Papel de trabajo de IVA e ISR</b> mensual por flujo de efectivo.</li>
-            <li><b>DIOT</b> por proveedor, lista para capturar.</li>
-            <li><b>Revisión de deducibilidad:</b> efectivo, uso del CFDI, EFOS, PPD sin complemento.</li>
-            <li><b>Declaración anual</b> de persona física con deducciones personales y sus topes.</li>
-          </ul>
-        </article>
-        <article class="funcion">
-          <h3>Listas del SAT</h3>
-          <ul>
-            <li><b>Lista 69-B</b> (empresas que facturan operaciones simuladas).</li>
-            <li><b>Listas del artículo 69</b>: más de medio millón de contribuyentes incumplidos.</li>
-            <li><b>Cruce automático</b> con tus clientes y proveedores.</li>
-            <li><b>Tipo de cambio</b> publicado en el DOF y revisión de facturas en dólares.</li>
-          </ul>
-        </article>
-        <article class="funcion">
-          <h3>Seguridad</h3>
-          <ul>
-            <li><b>e.firma cifrada</b> para tu usuario de Windows.</li>
-            <li><b>Respaldo y restauración</b> completos en un clic.</li>
-            <li><b>Bitácora</b> de todo lo que se hizo con cada RFC.</li>
-            <li>Nunca reenvía una solicitud al SAT <b>sin tu permiso</b>.</li>
-          </ul>
-        </article>
-        <article class="funcion">
-          <h3>Nómina y retenciones</h3>
-          <ul>
-            <li><b>Reporte de nómina</b> como patrón o como trabajador.</li>
-            <li>Totales por empleado, por recibo y por concepto.</li>
-            <li><b>Constancias de retenciones</b> por clave y por retenedor.</li>
-            <li>Todo exportable a Excel.</li>
-          </ul>
-        </article>
+      <span class="etiqueta">Cómo funciona</span>
+      <h2>Así de fácil</h2>
+      <div class="tres">
+        <div><b>Agrega tu RFC</b><p>Con los archivos .cer y .key de tu e.firma. Se guardan cifrados en tu computadora, nada se sube a internet.</p></div>
+        <div><b>Descarga tus facturas</b><p>Emitidas y recibidas, del periodo que quieras. El programa habla directo con el SAT y te avisa cuando terminó.</p></div>
+        <div><b>Revisa y declara</b><p>Tablero, DIOT, papel de trabajo, deducibilidad, declaración anual… todo listo y exportable a Excel.</p></div>
       </div>
     </div>
   </section>
 
-  <section class="seccion" id="pantallas">
+  <section class="seccion" id="herramientas">
     <div class="ancho">
-      <span class="etiqueta">Pantallas</span>
-      <h2>Así se ve por dentro</h2>
-      <p class="intro">Capturas reales del programa con datos de una empresa de demostración. Toca una imagen para verla completa.</p>
-      <div class="galeria">
-        <figure><button type="button" aria-label="Ampliar: Tablero"><img src="img/01-tablero.png" alt="Tablero" loading="lazy" width="1382" height="736"></button><figcaption><b>Tablero</b><span>Tu año de un vistazo, con avisos que te llevan a resolverlos.</span></figcaption></figure>
-        <figure><button type="button" aria-label="Ampliar: Consulta de comprobantes"><img src="img/02-comprobantes.png" alt="Consulta de comprobantes" loading="lazy" width="1382" height="736"></button><figcaption><b>Consulta de comprobantes</b><span>Filtros, totales por tipo y Excel en un clic.</span></figcaption></figure>
-        <figure><button type="button" aria-label="Ampliar: Nueva solicitud"><img src="img/07-nueva-solicitud.png" alt="Nueva solicitud de descarga" loading="lazy" width="556" height="643" style="object-fit:contain;background:var(--azul-claro)"></button><figcaption><b>Nueva solicitud</b><span>Emitidas o recibidas, XML o Metadata, el periodo que quieras.</span></figcaption></figure>
-        <figure><button type="button" aria-label="Ampliar: Revisión de deducibilidad"><img src="img/06-deducibilidad.png" alt="Revisión de deducibilidad" loading="lazy" width="1382" height="736"></button><figcaption><b>Revisión de deducibilidad</b><span>Qué no podrás deducir, por qué y a qué proveedor reclamar.</span></figcaption></figure>
-        <figure><button type="button" aria-label="Ampliar: DIOT"><img src="img/04-diot.png" alt="DIOT" loading="lazy" width="1382" height="736"></button><figcaption><b>DIOT</b><span>Por proveedor, con flujo de efectivo y pagos de facturas PPD.</span></figcaption></figure>
-        <figure><button type="button" aria-label="Ampliar: Papel de trabajo"><img src="img/05-papel-trabajo.png" alt="Papel de trabajo de IVA e ISR" loading="lazy" width="1382" height="736"></button><figcaption><b>Papel de trabajo IVA / ISR</b><span>El mes completo: cobrado, acreditable y resultado.</span></figcaption></figure>
-        <figure><button type="button" aria-label="Ampliar: Facturas PPD"><img src="img/03-ppd.png" alt="Facturas PPD por cobrar" loading="lazy" width="1382" height="736"></button><figcaption><b>Facturas PPD</b><span>Qué te deben, qué debes y desde cuándo.</span></figcaption></figure>
-        <figure><button type="button" aria-label="Ampliar: Declaración anual"><img src="img/08-declaracion-anual.png" alt="Declaración anual de persona física" loading="lazy" width="1382" height="736"></button><figcaption><b>Declaración anual</b><span>Sueldos, deducciones personales y saldo estimado.</span></figcaption></figure>
-        <figure><button type="button" aria-label="Ampliar: Tipo de cambio"><img src="img/09-tipo-cambio.png" alt="Tipo de cambio del DOF" loading="lazy" width="1382" height="736"></button><figcaption><b>Tipo de cambio</b><span>El publicado en el DOF y la revisión de tus facturas en dólares.</span></figcaption></figure>
+      <span class="etiqueta">Herramientas</span>
+      <h2>Todo lo que trae, pantalla por pantalla</h2>
+      <p class="intro">Son capturas reales con datos de una empresa de prueba. Elige una herramienta para verla.</p>
+      <div class="explorador">
+        <div class="pestanas" role="tablist" aria-label="Herramientas de SAT Download" id="pestanas"></div>
+        <div id="paneles"></div>
+      </div>
+
+      <h3 style="margin-top:44px;font-size:22px;font-weight:800">Y además…</h3>
+      <div class="extras">
+        <div class="extra"><b>Descargas programadas</b><span>Diarias, semanales o mensuales, sin que te acuerdes.</span></div>
+        <div class="extra"><b>Varios RFC</b><span>Tus clientes, tu empresa y tú, cada quien con su e.firma.</span></div>
+        <div class="extra"><b>PDF de tus facturas</b><span>Facturas, pagos, notas de crédito y recibos de nómina.</span></div>
+        <div class="extra"><b>Estatus en el SAT</b><span>Detecta facturas canceladas y te avisa.</span></div>
+        <div class="extra"><b>Validación del sello</b><span>Comprueba que cada XML sea auténtico.</span></div>
+        <div class="extra"><b>Listas 69-B y art. 69</b><span>Cruza a tus clientes y proveedores contra las listas del SAT.</span></div>
+        <div class="extra"><b>Nómina</b><span>Reporte como patrón o como trabajador.</span></div>
+        <div class="extra"><b>Constancias de retenciones</b><span>Descárgalas y consúltalas por clave y retenedor.</span></div>
+        <div class="extra"><b>Importar XML</b><span>Desde carpetas o archivos ZIP que ya tengas.</span></div>
+        <div class="extra"><b>Conciliación</b><span>Metadata contra XML para pedir lo que falta.</span></div>
+        <div class="extra"><b>Respaldo</b><span>Respalda y restaura todo en un clic.</span></div>
+        <div class="extra"><b>Bitácora</b><span>Registro de todo lo que se hizo con cada RFC.</span></div>
       </div>
     </div>
   </section>
 
-  <section class="seccion" style="background:var(--superficie)">
+  <section class="seccion blanca" id="video">
     <div class="ancho">
-      <span class="etiqueta">Para quién es</span>
-      <h2>Hecho para quien vive con el SAT</h2>
+      <span class="etiqueta">Video</span>
+      <h2>Te lo explico en video</h2>
+      <p class="intro">Te enseño cada pantalla y en qué casos te ahorra más tiempo.</p>
+      <div class="marco-video" id="marco-video">
+        <div class="pronto">
+          <img src="img/logo.png" alt="" width="72" height="72">
+          <h3>Estoy terminando el video</h3>
+          <p>Muy pronto lo verás aquí. Mientras, échale un ojo a las herramientas de arriba.</p>
+        </div>
+      </div>
+      <p class="enlace-video" id="enlace-video" hidden><a href="#" target="_blank" rel="noopener">Verlo en YouTube ↗</a></p>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="ancho">
+      <span class="etiqueta">¿Para quién es?</span>
+      <h2>Para cualquiera que tenga que ver con el SAT</h2>
       <div class="perfiles">
         <div class="perfil"><h3>Contadores y despachos</h3><p>Programa las descargas de todos tus clientes y, en el cierre, saca la DIOT y el papel de trabajo de cada RFC en minutos.</p></div>
-        <div class="perfil"><h3>Pymes</h3><p>Sabe qué te deben y qué debes, detecta proveedores en listas negras antes de deducir y revisa tus facturas sin esperar al contador.</p></div>
-        <div class="perfil"><h3>Personas físicas</h3><p>Junta tus sueldos, gastos médicos, colegiaturas y demás deducciones, y estima tu declaración anual antes de abril.</p></div>
+        <div class="perfil"><h3>Pymes y negocios</h3><p>Ve qué te deben y qué debes, detecta proveedores en listas negras antes de deducir y revisa tus facturas sin esperar al contador.</p></div>
+        <div class="perfil"><h3>Personas físicas</h3><p>Junta tus sueldos, gastos médicos, colegiaturas y demás deducciones, y calcula tu declaración anual antes de abril.</p></div>
       </div>
     </div>
   </section>
 
-  <section class="compra seccion" id="comprar">
+  <section class="apoyo seccion" id="apoyo">
     <div class="ancho">
-      <span class="etiqueta" style="color:#86efac">Obtenerlo</span>
-      <h2>Todo esto, en un solo pago</h2>
+      <span class="etiqueta" style="color:#86efac">Apóyame</span>
+      <h2>Llévatela y apóyame con lo que quieras</h2>
+      <div class="carta">
+        <p>No soy una empresa ni te voy a cobrar cada mes. Hice SAT Download para ayudarme con mis propias facturas y me dio gusto ver todo lo que podía hacer, así que quiero compartirlo.</p>
+        <p>Lo único que te pido es un apoyo para seguir mejorándolo y para cubrir lo que me cuesta mantenerlo. Desde <b id="minimo">5 dólares</b>, lo que tú quieras. Con eso te mando el programa completo, con su código y sus manuales.</p>
+        <p class="firma">¡Gracias de corazón! — Woby</p>
+      </div>
       <div class="rejilla">
-        <div class="precio">
-          <p class="tachado">Otros programas: <s>50 USD</s> o <s>25 USD al mes</s></p>
-          <p class="cifra">$5<small>USD</small></p>
-          <p id="texto-monto">Un solo pago por transferencia bancaria.</p>
+        <div class="montos">
+          <h3>¿Con cuánto me apoyas?</h3>
+          <div class="opciones" id="opciones" role="group" aria-label="Monto del apoyo"></div>
+          <p class="elegido" id="elegido">$5<small>USD</small></p>
+          <p class="nota" id="equivalente"></p>
           <ul>
-            <li>Programa listo para Windows 10 y 11</li>
-            <li>Código fuente completo</li>
+            <li>El programa listo para Windows 10 y 11</li>
+            <li>El código fuente completo</li>
             <li>Manual de usuario y manual técnico</li>
-            <li>Licencia MIT</li>
+            <li>Licencia MIT: úsalo y adáptalo como quieras</li>
           </ul>
         </div>
         <ol class="pasos">
           <li>
-            <h3>Transfiere por SPEI</h3>
-            <p id="texto-transferencia">Desde la app de tu banco, a esta CLABE:</p>
+            <h3>Haz una transferencia</h3>
+            <p id="texto-transferencia">Desde la app de tu banco, por SPEI, a esta CLABE:</p>
             <div class="dato-copiable"><code id="clabe">CLABE disponible muy pronto</code><button type="button" data-copiar="clabe">Copiar</button></div>
-            <p>Concepto: <b>SATDownload</b></p>
+            <p>En el concepto escribe <b>SATDownload</b>.</p>
           </li>
           <li>
-            <h3>Envía tu comprobante</h3>
-            <p>Manda la captura o el PDF de tu transferencia a este correo, junto con el correo donde quieres recibir el paquete:</p>
+            <h3>Mándame tu comprobante</h3>
+            <p>Envía la captura o el PDF de tu transferencia a este correo, y dime a qué correo te mando el programa:</p>
             <div class="dato-copiable"><code id="correo">correo disponible muy pronto</code><button type="button" data-copiar="correo">Copiar</button></div>
           </li>
           <li>
-            <h3>Recibe tu enlace de descarga</h3>
-            <p>Te enviamos el paquete completo <span id="tiempo-entrega">en menos de 24 horas</span>. Descomprímelo, copia la carpeta Programa a C:\SATDownload y listo.</p>
+            <h3>Te mando tu enlace</h3>
+            <p>Te envío el paquete completo <span id="tiempo-entrega">en menos de 24 horas</span>. Lo descomprimes, copias la carpeta Programa a <b>C:\SATDownload</b> y listo.</p>
           </li>
         </ol>
       </div>
@@ -371,23 +393,24 @@ footer .marca { color: var(--tinta); }
   <section class="seccion" id="preguntas">
     <div class="ancho">
       <span class="etiqueta">Preguntas</span>
-      <h2>Antes de comprar</h2>
+      <h2>Lo que más me preguntan</h2>
       <div class="dos">
         <div>
-          <h3>Requisitos</h3>
+          <h3>Qué necesitas</h3>
           <ul class="lista-simple">
-            <li>Windows 10 u 11 de 64 bits. No hay que instalar nada más.</li>
-            <li>Conexión a internet para descargar del SAT.</li>
+            <li>Una computadora con Windows 10 u 11 de 64 bits. No hay que instalar nada más.</li>
+            <li>Internet para descargar del SAT.</li>
             <li>La e.firma vigente de cada RFC: archivos .cer y .key y su contraseña.</li>
           </ul>
         </div>
         <div>
+          <details><summary>¿Por qué pides un apoyo si el código es libre?</summary><p>Porque mantenerlo y mejorarlo me cuesta tiempo y dinero. Con tu apoyo te llevas el paquete completo, listo para usar, y me ayudas a seguir haciendo herramientas como esta.</p></details>
           <details><summary>¿Es una aplicación del SAT?</summary><p>No. Es una herramienta independiente que usa los servicios públicos que el SAT ofrece a los contribuyentes. No tiene relación con el SAT ni con ninguna autoridad.</p></details>
-          <details><summary>¿Sustituye a mi contador?</summary><p>No. Sus reportes y cálculos son estimaciones de apoyo hechas con tus CFDI. Antes de presentar una declaración, compárala con la del SAT o consúltala con tu contador.</p></details>
-          <details><summary>¿Mis datos se suben a internet?</summary><p>No. Todo se guarda en tu computadora y tu e.firma queda cifrada para tu usuario de Windows. El programa solo se comunica con el SAT y con el Diario Oficial (tipo de cambio).</p></details>
-          <details><summary>¿Funciona en Mac?</summary><p>No. Es un programa para Windows 10 y 11.</p></details>
-          <details><summary>¿Puedo usarlo con varios RFC?</summary><p>Sí. Registras los RFC que necesites, cada uno con su e.firma, y cambias entre ellos cuando quieras.</p></details>
-          <details><summary>¿Cómo actualizo a una versión nueva?</summary><p>Reemplazas la carpeta del programa. Tus datos no se pierden porque se guardan en otra carpeta de tu computadora.</p></details>
+          <details><summary>¿Sustituye a mi contador?</summary><p>No. Sus reportes y cálculos son estimaciones de apoyo hechas con tus facturas. Antes de presentar una declaración, compárala con la del SAT o revísala con tu contador.</p></details>
+          <details><summary>¿Mis datos se suben a internet?</summary><p>No. Todo se queda en tu computadora y tu e.firma se guarda cifrada para tu usuario de Windows. El programa solo se conecta al SAT y al Diario Oficial (para el tipo de cambio).</p></details>
+          <details><summary>¿Funciona en Mac?</summary><p>No, por ahora solo en Windows 10 y 11.</p></details>
+          <details><summary>¿Lo puedo usar con varios RFC?</summary><p>Sí. Agregas los RFC que necesites, cada uno con su e.firma, y cambias entre ellos cuando quieras.</p></details>
+          <details><summary>¿Y si sale una versión nueva?</summary><p>Reemplazas la carpeta del programa y listo. Tus datos no se pierden porque se guardan en otra carpeta de tu computadora.</p></details>
         </div>
       </div>
     </div>
@@ -398,7 +421,7 @@ footer .marca { color: var(--tinta); }
   <div class="ancho">
     <a class="marca" href="#inicio"><img src="img/logo.png" alt="" width="34" height="34">SAT Download</a>
     <p>Herramienta independiente: no tiene relación con el Servicio de Administración Tributaria (SAT). Sus cálculos son estimaciones de apoyo y no sustituyen la asesoría de un contador. Se distribuye bajo la licencia MIT, sin garantía de ningún tipo.</p>
-    <p>© 2026 WobyExplica <span id="pie-canal"></span></p>
+    <p>Hecho con cariño por Woby Explica · © 2026 <span id="pie-canal"></span></p>
   </div>
 </footer>
 
@@ -411,24 +434,137 @@ footer .marca { color: var(--tinta); }
 <script>
 (function () {
   var c = CONFIG;
-  // Video: se incrusta si hay ID; si no, queda el aviso de "muy pronto".
+
+  // ── Herramientas (pestañas con captura) ──
+  var HERRAMIENTAS = [
+    { t: "Tablero", img: "01-tablero.png", h: "Tu año de un vistazo",
+      p: "Lo primero que ves al abrir: cuánto facturaste, cuánto gastaste y cómo vas contra el año pasado.",
+      l: ["Ingresos, gastos, IVA y nómina del periodo", "Gráfica mes por mes", "Principales clientes y proveedores", "Avisos que te llevan directo a resolverlos"] },
+    { t: "Descargas", img: "07-nueva-solicitud.png", ancho: 556, alto: 643, h: "Pides y él descarga",
+      p: "Eliges emitidas o recibidas, XML o Metadata y el periodo. Si es muy largo, lo divide solo según los límites del SAT.",
+      l: ["Por periodo o por UUID", "Descargas programadas", "Reintentos sin volver a pedir al SAT", "Importación de XML que ya tengas"] },
+    { t: "Comprobantes", img: "02-comprobantes.png", h: "Todas tus facturas en una tabla",
+      p: "Busca por fecha, RFC, tipo o estatus, con totales al pie y exportación a Excel en un clic.",
+      l: ["Ingresos, egresos, pagos y nómina", "PDF de cualquier factura", "Validación de estatus y del sello digital"] },
+    { t: "Facturas PPD", img: "03-ppd.png", h: "Qué te deben y qué debes",
+      p: "Cruza tus facturas PPD con sus complementos de pago y notas de crédito para decirte el saldo real de cada una.",
+      l: ["Por cobrar y por pagar", "Antigüedad de saldos", "Notas de crédito aplicadas"] },
+    { t: "Papel de trabajo", img: "05-papel-trabajo.png", h: "IVA e ISR del mes, listos",
+      p: "El papel de trabajo mensual por flujo de efectivo: lo cobrado, lo pagado y el resultado, con el detalle de cada cifra.",
+      l: ["IVA trasladado y acreditable", "Notas de crédito sin duplicar", "Exportable a Excel"] },
+    { t: "DIOT", img: "04-diot.png", h: "La DIOT por proveedor",
+      p: "El IVA pagado a cada proveedor en el mes, con los pagos de facturas PPD, para capturarla sin sufrir.",
+      l: ["Por RFC y tipo de operación", "Pagos en parcialidades incluidos", "Exportable a Excel"] },
+    { t: "Deducibilidad", img: "06-deducibilidad.png", h: "Qué no vas a poder deducir",
+      p: "Revisa tus gastos y te dice cuáles no se deducen o hay que revisar, por qué y a qué proveedor reclamarle.",
+      l: ["Pagos en efectivo de más de $2,000", "Uso del CFDI incorrecto", "PPD sin complemento de pago", "Proveedores en listas del SAT"] },
+    { t: "Declaración anual", img: "08-declaracion-anual.png", h: "Tu anual antes de abril",
+      p: "Para personas físicas: junta tus sueldos y deducciones personales, aplica los topes y estima tu saldo a favor o a cargo.",
+      l: ["Sueldos por patrón", "Deducciones personales con sus topes", "Colegiaturas y constancias de retenciones"] },
+    { t: "Tipo de cambio", img: "09-tipo-cambio.png", h: "El dólar del DOF",
+      p: "El tipo de cambio publicado en el Diario Oficial y la revisión de tus facturas en dólares.",
+      l: ["El que aplica a cada fecha", "Facturas en USD con tipo de cambio distinto"] }
+  ];
+  var tabs = document.getElementById('pestanas'), paneles = document.getElementById('paneles');
+  HERRAMIENTAS.forEach(function (h, i) {
+    var id = 'h' + i;
+    var b = document.createElement('button');
+    b.type = 'button'; b.id = 'tab-' + id; b.setAttribute('role', 'tab');
+    b.setAttribute('aria-controls', 'panel-' + id); b.setAttribute('aria-selected', i === 0 ? 'true' : 'false'); b.tabIndex = i === 0 ? 0 : -1;
+    b.innerHTML = '<span>' + String(i + 1).padStart(2, '0') + '</span>' + h.t;
+    tabs.appendChild(b);
+    var p = document.createElement('div');
+    p.className = 'panel'; p.id = 'panel-' + id; p.setAttribute('role', 'tabpanel'); p.setAttribute('aria-labelledby', b.id); p.hidden = i !== 0;
+    p.innerHTML = '<div class="texto"><h3></h3><p></p><ul></ul></div>' +
+      '<button type="button" class="captura"><img loading="lazy" width="' + (h.ancho || 1382) + '" height="' + (h.alto || 736) + '"><span class="lupa">Toca para ampliar ⤢</span></button>';
+    p.querySelector('h3').textContent = h.h;
+    p.querySelector('p').textContent = h.p;
+    var ul = p.querySelector('ul');
+    h.l.forEach(function (x) { var li = document.createElement('li'); li.textContent = x; ul.appendChild(li); });
+    var img = p.querySelector('img'); img.src = 'img/' + h.img; img.alt = 'Pantalla: ' + h.t;
+    p.querySelector('.captura').setAttribute('aria-label', 'Ampliar pantalla: ' + h.t);
+    p.querySelector('.captura').addEventListener('click', function () { abrirVisor(img.src, img.alt, h.t); });
+    paneles.appendChild(p);
+  });
+  function elegir(i, enfocar) {
+    tabs.querySelectorAll('[role=tab]').forEach(function (b, j) {
+      b.setAttribute('aria-selected', j === i ? 'true' : 'false'); b.tabIndex = j === i ? 0 : -1;
+      document.getElementById(b.getAttribute('aria-controls')).hidden = j !== i;
+      if (j === i) { if (enfocar) b.focus(); b.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
+    });
+  }
+  tabs.addEventListener('click', function (e) {
+    var b = e.target.closest('[role=tab]'); if (!b) return;
+    elegir(Array.prototype.indexOf.call(tabs.children, b), false);
+  });
+  tabs.addEventListener('keydown', function (e) {
+    var n = tabs.children.length, i = Array.prototype.indexOf.call(tabs.children, document.activeElement);
+    if (i < 0) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); elegir((i + 1) % n, true); }
+    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); elegir((i - 1 + n) % n, true); }
+  });
+
+  // ── Visor ──
+  var visor = document.getElementById('visor');
+  function abrirVisor(src, alt, texto) {
+    document.getElementById('visor-img').src = src;
+    document.getElementById('visor-img').alt = alt;
+    document.getElementById('visor-texto').textContent = texto;
+    if (visor.showModal) visor.showModal();
+  }
+  document.getElementById('cerrar-visor').addEventListener('click', function () { visor.close(); });
+  visor.addEventListener('click', function (e) { if (e.target === visor) visor.close(); });
+
+  // ── Foto ──
+  if (c.foto) {
+    var av = document.getElementById('avatar'); av.textContent = '';
+    var f = document.createElement('img'); f.src = c.foto; f.alt = ''; av.appendChild(f);
+  }
+
+  // ── Video ──
   if (c.videoYoutube) {
-    var marco = document.getElementById('marco-video');
-    marco.innerHTML = '';
-    var f = document.createElement('iframe');
-    f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(c.videoYoutube);
-    f.title = 'Video de SAT Download';
-    f.allow = 'accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-    f.allowFullscreen = true; f.loading = 'lazy';
-    marco.appendChild(f);
+    var marco = document.getElementById('marco-video'); marco.innerHTML = '';
+    var fr = document.createElement('iframe');
+    fr.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(c.videoYoutube);
+    fr.title = 'Video de SAT Download';
+    fr.allow = 'accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    fr.allowFullscreen = true; fr.loading = 'lazy';
+    marco.appendChild(fr);
     var enlace = document.getElementById('enlace-video');
     enlace.querySelector('a').href = 'https://www.youtube.com/watch?v=' + encodeURIComponent(c.videoYoutube);
     enlace.hidden = false;
   }
   if (c.canalYoutube) {
-    var pie = document.getElementById('pie-canal');
-    pie.innerHTML = '· <a href="' + c.canalYoutube + '" target="_blank" rel="noopener">Canal de YouTube</a>';
+    var pie = document.getElementById('pie-canal'); pie.textContent = '· ';
+    var a = document.createElement('a'); a.href = c.canalYoutube; a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'Mi canal de YouTube';
+    pie.appendChild(a);
   }
+
+  // ── Montos ──
+  var montos = (c.montos && c.montos.length) ? c.montos : [5, 7, 10, 15];
+  document.getElementById('minimo').textContent = montos[0] + ' dólares';
+  var opciones = document.getElementById('opciones');
+  function mostrarMonto(m) {
+    document.getElementById('elegido').innerHTML = '$' + m + '<small>USD</small>';
+    var eq = document.getElementById('equivalente');
+    eq.textContent = c.tipoCambio ? 'Son unos $' + Math.round(m * c.tipoCambio) + ' pesos. Transfiere esa cantidad en pesos mexicanos.' : 'Transfiere su equivalente en pesos mexicanos.';
+    opciones.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(Number(b.dataset.m) === m)); });
+  }
+  montos.forEach(function (m) {
+    var b = document.createElement('button'); b.type = 'button'; b.dataset.m = m; b.textContent = '$' + m;
+    b.addEventListener('click', function () { mostrarMonto(m); });
+    opciones.appendChild(b);
+  });
+  var otra = document.createElement('button'); otra.type = 'button'; otra.textContent = 'Otra cantidad';
+  otra.addEventListener('click', function () {
+    opciones.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(b === otra)); });
+    document.getElementById('elegido').innerHTML = '¡Tú decides!';
+    document.getElementById('equivalente').textContent = 'Cualquier cantidad desde ' + montos[0] + ' USD' + (c.tipoCambio ? ' (unos $' + Math.round(montos[0] * c.tipoCambio) + ' pesos)' : '') + '. ¡Gracias!';
+  });
+  opciones.appendChild(otra);
+  mostrarMonto(montos[0]);
+
+  // ── Datos de transferencia ──
   function poner(id, valor) {
     var el = document.getElementById(id);
     if (valor) { el.textContent = valor; el.classList.remove('provisional'); } else { el.classList.add('provisional'); }
@@ -436,37 +572,16 @@ footer .marca { color: var(--tinta); }
   poner('clabe', c.clabe);
   poner('correo', c.correo);
   if (c.tiempoEntrega) document.getElementById('tiempo-entrega').textContent = c.tiempoEntrega;
-  if (c.montoMxn) {
-    document.getElementById('texto-monto').textContent = 'Un solo pago por transferencia: $' + c.montoMxn + ' MXN.';
-    document.getElementById('texto-transferencia').textContent = 'Desde la app de tu banco, transfiere $' + c.montoMxn + ' MXN a esta CLABE:';
-  }
-
-  // Copiar CLABE y correo.
   var aviso = document.getElementById('copiado');
   document.querySelectorAll('[data-copiar]').forEach(function (b) {
     b.addEventListener('click', function () {
-      var campo = b.getAttribute('data-copiar');
-      var valor = c[campo];
+      var campo = b.getAttribute('data-copiar'), valor = c[campo];
       if (!valor) { aviso.textContent = 'Este dato estará disponible muy pronto.'; return; }
       var listo = function () { aviso.textContent = (campo === 'clabe' ? 'CLABE' : 'Correo') + ' copiado.'; };
       if (navigator.clipboard) navigator.clipboard.writeText(valor).then(listo, function () { aviso.textContent = valor; });
       else aviso.textContent = valor;
     });
   });
-
-  // Visor de pantallas.
-  var visor = document.getElementById('visor');
-  document.querySelectorAll('.galeria figure').forEach(function (fig) {
-    fig.querySelector('button').addEventListener('click', function () {
-      var img = fig.querySelector('img');
-      document.getElementById('visor-img').src = img.src;
-      document.getElementById('visor-img').alt = img.alt;
-      document.getElementById('visor-texto').textContent = fig.querySelector('figcaption b').textContent;
-      if (visor.showModal) visor.showModal();
-    });
-  });
-  document.getElementById('cerrar-visor').addEventListener('click', function () { visor.close(); });
-  visor.addEventListener('click', function (e) { if (e.target === visor) visor.close(); });
 })();
 </script>
 </body>
