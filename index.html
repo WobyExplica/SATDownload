@@ -6,7 +6,7 @@
 <title>SAT Download · Woby Explica</title>
 <meta name="description" content="Hola, soy Woby. Te comparto SAT Download: descarga todas tus facturas del SAT y revísalas con tablero, DIOT, papel de trabajo, deducibilidad y declaración anual. Tú decides con cuánto me apoyas.">
 <meta property="og:title" content="SAT Download · Una herramienta de Woby Explica">
-<meta property="og:description" content="Descarga y revisa todas tus facturas del SAT. Sin mensualidades, con tus datos en tu PC y el código incluido. Apóyame con lo que quieras, desde 5 USD.">
+<meta property="og:description" content="Descarga y revisa todas tus facturas del SAT. Sin mensualidades, con tus datos en tu PC y el código incluido. Apóyame con lo que quieras, desde $100 pesos.">
 <meta property="og:image" content="img/01-tablero.png">
 <link rel="icon" type="image/png" href="img/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,10 +20,9 @@
     videoYoutube: "",          // ID del video de YouTube, p. ej. "dQw4w9WgXcQ" (lo que va después de watch?v=)
     canalYoutube: "",          // Enlace a tu canal, p. ej. "https://www.youtube.com/@WobyExplica"
     foto: "",                  // Tu foto o avatar, p. ej. "img/woby.jpg" (cuadrada). Vacío = círculo con "W"
-    clabe: "",                 // Tu CLABE interbancaria (18 dígitos)
-    correo: "",                // Correo para recibir los comprobantes
-    tipoCambio: 18.5,          // Pesos por dólar para mostrar el equivalente en MXN (0 = no mostrarlo)
-    montos: [5, 7, 10, 15],    // Apoyos sugeridos en USD (el primero es el mínimo)
+    clabe: "722969010146718092",   // Tu CLABE interbancaria (18 dígitos)
+    correo: "woby2021@gmail.com",   // Correo para recibir los comprobantes
+    montos: [100, 200, 300, 500],   // Apoyos sugeridos en pesos (el primero es el mínimo)
     tiempoEntrega: "en menos de 24 horas"   // Cuándo envías el enlace de descarga
   };
 </script>
@@ -65,7 +64,7 @@ a { color: inherit; }
 h1, h2, h3 { font-family: var(--f-titulo); line-height: 1.12; text-wrap: balance; margin: 0; }
 p { margin: 0; }
 [id] { scroll-margin-top: 72px; }
-.ancho { max-width: 1120px; margin: 0 auto; padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px)); }
+.ancho { max-width: 1240px; margin: 0 auto; padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px)); }
 .seccion { padding-block: 72px; }
 .seccion h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 800; }
 .blanca { background: var(--superficie); }
@@ -92,8 +91,16 @@ header .boton { padding: 8px 16px; font-size: 14px; }
 @media (max-width: 820px) { nav.menu { display: none; } header .boton { margin-left: auto; } .marca small { display: none; } }
 
 /* Portada */
-.portada { background: linear-gradient(180deg, var(--azul-hondo), var(--azul)); color: var(--sobre-azul); padding-block: 56px 0; overflow: hidden; }
-.portada .ancho { display: grid; gap: 24px; }
+.portada { background: linear-gradient(180deg, var(--azul-hondo), var(--azul)); color: var(--sobre-azul); padding-block: 56px 64px; overflow: hidden; }
+.portada .ancho { display: grid; gap: 32px; align-items: center; }
+.portada .texto-portada { display: grid; gap: 24px; }
+@media (min-width: 1000px) {
+  .portada .ancho { grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); }
+  .portada h1 { font-size: clamp(34px, 3.6vw, 50px) !important; }
+}
+.foto-sistema { all: unset; display: block; cursor: zoom-in; border-radius: 12px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.12); }
+.foto-sistema:focus-visible { outline: 3px solid var(--verde-vivo); outline-offset: 4px; }
+.foto-sistema + small { display: block; text-align: center; margin-top: 10px; font-size: 13px; color: var(--sobre-azul-suave); }
 .saludo { display: flex; align-items: center; gap: 14px; }
 .avatar { width: 64px; height: 64px; border-radius: 50%; flex: none; background: var(--verde-vivo); color: #0b2a16; display: grid; place-items: center; font: 800 30px var(--f-titulo); overflow: hidden; box-shadow: 0 0 0 4px rgba(255,255,255,.18); }
 .avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -106,7 +113,6 @@ header .boton { padding: 8px 16px; font-size: 14px; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chips span { font-size: 14px; padding: 5px 12px; border-radius: 999px; background: rgba(255,255,255,.1); color: var(--sobre-azul); }
 .chips span::before { content: "✓ "; color: #86efac; font-weight: 700; }
-.ventana { margin-top: 16px; border-radius: 12px 12px 0 0; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,.35); }
 
 /* ¿Te suena? */
 .dolores { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 28px; }
@@ -239,6 +245,7 @@ footer .marca { color: var(--tinta); }
 <main id="inicio">
   <section class="portada">
     <div class="ancho">
+      <div class="texto-portada">
       <div class="saludo">
         <div class="avatar" id="avatar" aria-hidden="true">W</div>
         <p>¡Hola! Soy <b>Woby</b>, de <b>Woby Explica</b> 👋</p>
@@ -250,7 +257,13 @@ footer .marca { color: var(--tinta); }
         <a class="boton claro" href="#herramientas">Ver qué hace</a>
       </div>
       <div class="chips"><span>Windows 10 y 11</span><span>Varios RFC</span><span>Sin mensualidades</span><span>Datos en tu PC</span><span>Código incluido</span></div>
-      <img class="ventana" src="img/01-tablero.png" alt="Tablero de SAT Download con ingresos, gastos, IVA, gráfica mensual, principales clientes y avisos" width="1382" height="736">
+      </div>
+      <div>
+        <button type="button" class="foto-sistema" id="foto-sistema" aria-label="Ampliar la pantalla del tablero">
+          <img src="img/01-tablero.png" alt="Tablero de SAT Download con ingresos, gastos, IVA, gráfica mensual, principales clientes y avisos" width="1382" height="736">
+        </button>
+        <small>El tablero de SAT Download · toca para ampliar</small>
+      </div>
     </div>
   </section>
 
@@ -352,14 +365,14 @@ footer .marca { color: var(--tinta); }
       <h2>Llévatela y apóyame con lo que quieras</h2>
       <div class="carta">
         <p>No soy una empresa ni te voy a cobrar cada mes. Hice SAT Download para ayudarme con mis propias facturas y me dio gusto ver todo lo que podía hacer, así que quiero compartirlo.</p>
-        <p>Lo único que te pido es un apoyo para seguir mejorándolo y para cubrir lo que me cuesta mantenerlo. Desde <b id="minimo">5 dólares</b>, lo que tú quieras. Con eso te mando el programa completo, con su código y sus manuales.</p>
+        <p>Lo único que te pido es un apoyo para seguir mejorándolo y para cubrir lo que me cuesta mantenerlo. Desde <b id="minimo">$100 pesos</b>, lo que tú quieras. Con eso te mando el programa completo, con su código y sus manuales.</p>
         <p class="firma">¡Gracias de corazón! — Woby</p>
       </div>
       <div class="rejilla">
         <div class="montos">
           <h3>¿Con cuánto me apoyas?</h3>
           <div class="opciones" id="opciones" role="group" aria-label="Monto del apoyo"></div>
-          <p class="elegido" id="elegido">$5<small>USD</small></p>
+          <p class="elegido" id="elegido">$100<small>pesos</small></p>
           <p class="nota" id="equivalente"></p>
           <ul>
             <li>El programa listo para Windows 10 y 11</li>
@@ -377,12 +390,12 @@ footer .marca { color: var(--tinta); }
           </li>
           <li>
             <h3>Mándame tu comprobante</h3>
-            <p>Envía la captura o el PDF de tu transferencia a este correo, y dime a qué correo te mando el programa:</p>
+            <p>Envía la captura o el PDF de tu transferencia a este correo:</p>
             <div class="dato-copiable"><code id="correo">correo disponible muy pronto</code><button type="button" data-copiar="correo">Copiar</button></div>
           </li>
           <li>
-            <h3>Te mando tu enlace</h3>
-            <p>Te envío el paquete completo <span id="tiempo-entrega">en menos de 24 horas</span>. Lo descomprimes, copias la carpeta Programa a <b>C:\SATDownload</b> y listo.</p>
+            <h3>Te respondo con los archivos</h3>
+            <p>En ese mismo correo te contesto <span id="tiempo-entrega">en menos de 24 horas</span> con el enlace para descargar el paquete completo: programa, código y manuales. Lo descomprimes, copias la carpeta Programa a <b>C:\SATDownload</b> y listo.</p>
           </li>
         </ol>
       </div>
@@ -540,29 +553,40 @@ footer .marca { color: var(--tinta); }
     pie.appendChild(a);
   }
 
-  // ── Montos ──
-  var montos = (c.montos && c.montos.length) ? c.montos : [5, 7, 10, 15];
-  document.getElementById('minimo').textContent = montos[0] + ' dólares';
+  document.getElementById('foto-sistema').addEventListener('click', function () {
+    abrirVisor('img/01-tablero.png', 'Tablero de SAT Download', 'Tablero');
+  });
+
+  // ── Montos (en pesos) ──
+  var montos = (c.montos && c.montos.length) ? c.montos : [100, 200, 300, 500];
+  function mxn(n) { return '$' + n.toLocaleString('es-MX'); }
+  document.getElementById('minimo').textContent = mxn(montos[0]) + ' pesos';
   var opciones = document.getElementById('opciones');
-  function mostrarMonto(m) {
-    document.getElementById('elegido').innerHTML = '$' + m + '<small>USD</small>';
-    var eq = document.getElementById('equivalente');
-    eq.textContent = c.tipoCambio ? 'Son unos $' + Math.round(m * c.tipoCambio) + ' pesos. Transfiere esa cantidad en pesos mexicanos.' : 'Transfiere su equivalente en pesos mexicanos.';
-    opciones.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(Number(b.dataset.m) === m)); });
+  function nota(i) {
+    if (i === 0) return 'El apoyo mínimo, y con eso ya me ayudas un montón.';
+    if (i === montos.length - 1) return 'Ideal si lo vas a usar en tu despacho con varios clientes. ¡Mil gracias!';
+    return '¡Gracias! Me ayudas muchísimo a seguir mejorándolo.';
   }
-  montos.forEach(function (m) {
-    var b = document.createElement('button'); b.type = 'button'; b.dataset.m = m; b.textContent = '$' + m;
-    b.addEventListener('click', function () { mostrarMonto(m); });
+  function mostrarMonto(i) {
+    opciones.querySelectorAll('button').forEach(function (b, j) { b.setAttribute('aria-pressed', String(j === i)); });
+    var eq = document.getElementById('equivalente');
+    if (i === montos.length) {
+      document.getElementById('elegido').innerHTML = '¡Tú decides!';
+      eq.textContent = 'Cualquier cantidad desde ' + mxn(montos[0]) + ' pesos. ¡Gracias!';
+      return;
+    }
+    document.getElementById('elegido').innerHTML = mxn(montos[i]) + '<small>pesos</small>';
+    eq.textContent = nota(i);
+  }
+  montos.forEach(function (m, i) {
+    var b = document.createElement('button'); b.type = 'button'; b.textContent = mxn(m);
+    b.addEventListener('click', function () { mostrarMonto(i); });
     opciones.appendChild(b);
   });
   var otra = document.createElement('button'); otra.type = 'button'; otra.textContent = 'Otra cantidad';
-  otra.addEventListener('click', function () {
-    opciones.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(b === otra)); });
-    document.getElementById('elegido').innerHTML = '¡Tú decides!';
-    document.getElementById('equivalente').textContent = 'Cualquier cantidad desde ' + montos[0] + ' USD' + (c.tipoCambio ? ' (unos $' + Math.round(montos[0] * c.tipoCambio) + ' pesos)' : '') + '. ¡Gracias!';
-  });
+  otra.addEventListener('click', function () { mostrarMonto(montos.length); });
   opciones.appendChild(otra);
-  mostrarMonto(montos[0]);
+  mostrarMonto(0);
 
   // ── Datos de transferencia ──
   function poner(id, valor) {
