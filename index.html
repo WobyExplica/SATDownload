@@ -6,7 +6,7 @@
 <title>SAT Download · Woby Explica</title>
 <meta name="description" content="Hola, soy Woby. Te comparto SAT Download: descarga todas tus facturas del SAT y revísalas con tablero, DIOT, papel de trabajo, deducibilidad y declaración anual. Tú decides con cuánto me apoyas.">
 <meta property="og:title" content="SAT Download · Una herramienta de Woby Explica">
-<meta property="og:description" content="Descarga y revisa todas tus facturas del SAT. Sin mensualidades, con tus datos en tu PC y el código incluido. Apóyame con lo que quieras, desde $100 pesos.">
+<meta property="og:description" content="Descarga y revisa todas tus facturas del SAT. Sin mensualidades, con tus datos en tu PC. Descárgalo y actívalo con un apoyo desde $100 pesos.">
 <meta property="og:image" content="img/01-tablero.png">
 <link rel="icon" type="image/png" href="img/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +23,9 @@
     clabe: "722969010146718092",   // Tu CLABE interbancaria (18 dígitos)
     correo: "woby2021@gmail.com",   // Correo para recibir los comprobantes
     montos: [100, 200, 300, 500],   // Apoyos sugeridos en pesos (el primero es el mínimo)
-    tiempoEntrega: "en menos de 24 horas"   // Cuándo envías el enlace de descarga
+    descarga: "https://github.com/wobyexplica/SATDownload/releases/latest/download/SATDownload-paquete.zip",   // ZIP del programa (Release de GitHub)
+    tamanoDescarga: "63 MB",
+    tiempoEntrega: "en menos de 24 horas"   // Cuándo envías la llave
   };
 </script>
 
@@ -251,12 +253,12 @@ footer .marca { color: var(--tinta); }
         <p>¡Hola! Soy <b>Woby</b>, de <b>Woby Explica</b> 👋</p>
       </div>
       <h1>Hoy te comparto la herramienta que uso para no pelearme con el SAT</h1>
-      <p class="bajada">Se llama <b>SAT Download</b>. Descarga solita todas tus facturas con tu e.firma y te las deja revisadas: tablero, DIOT, papel de trabajo de IVA e ISR, deducibilidad y declaración anual. Es un programa para tu computadora: <b>sin mensualidades</b>, con <b>tus datos en tu PC</b> y con el <b>código incluido</b>. Tú decides con cuánto me apoyas.</p>
+      <p class="bajada">Se llama <b>SAT Download</b>. Descarga solita todas tus facturas con tu e.firma y te las deja revisadas: tablero, DIOT, papel de trabajo de IVA e ISR, deducibilidad y declaración anual. Es un programa para tu computadora, <b>sin mensualidades</b> y con <b>tus datos en tu PC</b>. Lo descargas y, para activarlo, <b>tú decides con cuánto me apoyas</b>.</p>
       <div class="acciones">
         <a class="boton" href="#apoyo">Quiero la herramienta</a>
         <a class="boton claro" href="#herramientas">Ver qué hace</a>
       </div>
-      <div class="chips"><span>Windows 10 y 11</span><span>Varios RFC</span><span>Sin mensualidades</span><span>Datos en tu PC</span><span>Código incluido</span></div>
+      <div class="chips"><span>Windows 10 y 11</span><span>Varios RFC</span><span>Sin mensualidades</span><span>Datos en tu PC</span><span>Un solo apoyo</span></div>
       </div>
       <div>
         <button type="button" class="foto-sistema" id="foto-sistema" aria-label="Ampliar la pantalla del tablero">
@@ -365,7 +367,7 @@ footer .marca { color: var(--tinta); }
       <h2>Llévatela y apóyame con lo que quieras</h2>
       <div class="carta">
         <p>No soy una empresa ni te voy a cobrar cada mes. Hice SAT Download para ayudarme con mis propias facturas y me dio gusto ver todo lo que podía hacer, así que quiero compartirlo.</p>
-        <p>Lo único que te pido es un apoyo para seguir mejorándolo y para cubrir lo que me cuesta mantenerlo. Desde <b id="minimo">$100 pesos</b>, lo que tú quieras. Con eso te mando el programa completo, con su código y sus manuales.</p>
+        <p>Lo único que te pido es un apoyo para seguir mejorándolo y para cubrir lo que me cuesta mantenerlo. Desde <b id="minimo">$100 pesos</b>, lo que tú quieras. Con eso te mando tu llave para activarlo en tu computadora.</p>
         <p class="firma">¡Gracias de corazón! — Woby</p>
       </div>
       <div class="rejilla">
@@ -375,27 +377,32 @@ footer .marca { color: var(--tinta); }
           <p class="elegido" id="elegido">$100<small>pesos</small></p>
           <p class="nota" id="equivalente"></p>
           <ul>
-            <li>El programa listo para Windows 10 y 11</li>
-            <li>El código fuente completo</li>
-            <li>Manual de usuario y manual técnico</li>
-            <li>Licencia MIT: úsalo y adáptalo como quieras</li>
+            <li>Tu llave para usarlo en tu computadora</li>
+            <li>Todas las herramientas, sin mensualidades</li>
+            <li>Tu nombre en el programa: "Uso permitido a"</li>
+            <li>Manual de usuario y dudas por correo</li>
           </ul>
         </div>
         <ol class="pasos">
           <li>
-            <h3>Haz una transferencia</h3>
-            <p id="texto-transferencia">Desde la app de tu banco, por SPEI, a esta CLABE:</p>
-            <div class="dato-copiable"><code id="clabe">CLABE disponible muy pronto</code><button type="button" data-copiar="clabe">Copiar</button></div>
-            <p>En el concepto escribe <b>SATDownload</b>.</p>
+            <h3>Descarga el programa</h3>
+            <p>Descomprímelo y copia la carpeta <b>Programa</b> a <b>C:\SATDownload</b> (el archivo LEEME.txt te explica cada paso).</p>
+            <div class="dato-copiable"><a class="boton" id="descargar" href="#" download>Descargar SAT Download</a></div>
           </li>
           <li>
-            <h3>Mándame tu comprobante</h3>
-            <p>Envía la captura o el PDF de tu transferencia a este correo:</p>
+            <h3>Ábrelo y copia tu código</h3>
+            <p>Escribe tu nombre (aparecerá en el programa como <b>"Uso permitido a"</b>), presiona <b>Generar código</b> y luego <b>Copiar código</b>.</p>
+          </li>
+          <li>
+            <h3>Transfiere y mándame tu comprobante</h3>
+            <p id="texto-transferencia">Desde la app de tu banco, por SPEI, a esta CLABE (en el concepto escribe <b>SATDownload</b>):</p>
+            <div class="dato-copiable"><code id="clabe">CLABE disponible muy pronto</code><button type="button" data-copiar="clabe">Copiar</button></div>
+            <p>Envía la captura o el PDF de tu transferencia <b>junto con tu código</b> a este correo:</p>
             <div class="dato-copiable"><code id="correo">correo disponible muy pronto</code><button type="button" data-copiar="correo">Copiar</button></div>
           </li>
           <li>
-            <h3>Te respondo con los archivos</h3>
-            <p>En ese mismo correo te contesto <span id="tiempo-entrega">en menos de 24 horas</span> con el enlace para descargar el paquete completo: programa, código y manuales. Lo descomprimes, copias la carpeta Programa a <b>C:\SATDownload</b> y listo.</p>
+            <h3>Recibe tu llave</h3>
+            <p>En ese mismo correo te respondo <span id="tiempo-entrega">en menos de 24 horas</span> con tu llave. La pegas en el programa, presionas <b>Activar</b> y listo.</p>
           </li>
         </ol>
       </div>
@@ -417,7 +424,8 @@ footer .marca { color: var(--tinta); }
           </ul>
         </div>
         <div>
-          <details><summary>¿Por qué pides un apoyo si el código es libre?</summary><p>Porque mantenerlo y mejorarlo me cuesta tiempo y dinero. Con tu apoyo te llevas el paquete completo, listo para usar, y me ayudas a seguir haciendo herramientas como esta.</p></details>
+          <details><summary>¿Por qué necesita una llave?</summary><p>Para que cada copia quede a nombre de quien me apoyó y nadie la reparta o la revenda. La llave es para una computadora y tu nombre aparece en el programa como "Uso permitido a". La descarga es libre: lo que activas con tu apoyo es tu copia.</p></details>
+          <details><summary>¿Y si cambio de computadora?</summary><p>Escríbeme con el código de activación de la computadora nueva y lo revisamos. Si solo cambias una pieza, como el disco, normalmente tu llave sigue funcionando.</p></details>
           <details><summary>¿Es una aplicación del SAT?</summary><p>No. Es una herramienta independiente que usa los servicios públicos que el SAT ofrece a los contribuyentes. No tiene relación con el SAT ni con ninguna autoridad.</p></details>
           <details><summary>¿Sustituye a mi contador?</summary><p>No. Sus reportes y cálculos son estimaciones de apoyo hechas con tus facturas. Antes de presentar una declaración, compárala con la del SAT o revísala con tu contador.</p></details>
           <details><summary>¿Mis datos se suben a internet?</summary><p>No. Todo se queda en tu computadora y tu e.firma se guarda cifrada para tu usuario de Windows. El programa solo se conecta al SAT y al Diario Oficial (para el tipo de cambio).</p></details>
@@ -433,7 +441,7 @@ footer .marca { color: var(--tinta); }
 <footer>
   <div class="ancho">
     <a class="marca" href="#inicio"><img src="img/logo.png" alt="" width="34" height="34">SAT Download</a>
-    <p>Herramienta independiente: no tiene relación con el Servicio de Administración Tributaria (SAT). Sus cálculos son estimaciones de apoyo y no sustituyen la asesoría de un contador. Se distribuye bajo la licencia MIT, sin garantía de ningún tipo.</p>
+    <p>Herramienta independiente: no tiene relación con el Servicio de Administración Tributaria (SAT). Sus cálculos son estimaciones de apoyo y no sustituyen la asesoría de un contador. Su uso está sujeto a su licencia (una llave por computadora) y se entrega sin garantía de ningún tipo.</p>
     <p>Hecho con cariño por Woby Explica · © 2026 <span id="pie-canal"></span></p>
   </div>
 </footer>
@@ -596,6 +604,14 @@ footer .marca { color: var(--tinta); }
   poner('clabe', c.clabe);
   poner('correo', c.correo);
   if (c.tiempoEntrega) document.getElementById('tiempo-entrega').textContent = c.tiempoEntrega;
+  var descargar = document.getElementById('descargar');
+  if (c.descarga) {
+    descargar.href = c.descarga;
+    if (c.tamanoDescarga) descargar.textContent = 'Descargar SAT Download (' + c.tamanoDescarga + ')';
+  } else {
+    descargar.removeAttribute('download');
+    descargar.addEventListener('click', function (e) { e.preventDefault(); aviso.textContent = 'La descarga estará disponible muy pronto.'; });
+  }
   var aviso = document.getElementById('copiado');
   document.querySelectorAll('[data-copiar]').forEach(function (b) {
     b.addEventListener('click', function () {
