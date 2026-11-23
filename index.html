@@ -17,8 +17,9 @@
   // ═══════════════ DATOS PARA LLENAR (solo aquí) ═══════════════
   // Deja "" lo que todavía no tengas: la página muestra un texto provisional.
   const CONFIG = {
-    videoYoutube: "",          // ID del video de YouTube, p. ej. "dQw4w9WgXcQ" (lo que va después de watch?v=)
-    canalYoutube: "",          // Enlace a tu canal, p. ej. "https://www.youtube.com/@WobyExplica"
+    videoYoutube: "zcBwTDN88Ik",   // ID del video de YouTube (lo que va después de youtu.be/ o watch?v=)
+    videoEstreno: "2026-11-23T18:00:00",   // Antes de esta fecha y hora se muestra "se estrena el..." (el video aún es privado)
+    canalYoutube: "https://www.youtube.com/@WobyExplica",   // Enlace a tu canal
     foto: "",                  // Tu foto o avatar, p. ej. "img/woby.jpg" (cuadrada). Vacío = círculo con "W"
     clabe: "722969010146718092",   // Tu CLABE interbancaria (18 dígitos)
     correo: "woby2021@gmail.com",   // Correo para recibir los comprobantes
@@ -543,7 +544,19 @@ footer .marca { color: var(--tinta); }
   }
 
   // ── Video ──
-  if (c.videoYoutube) {
+  // Antes del estreno el video sigue privado en YouTube: se muestra el aviso con la fecha en lugar del reproductor.
+  var estreno = c.videoEstreno ? new Date(c.videoEstreno) : null;
+  if (c.videoYoutube && estreno && new Date() < estreno) {
+    var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    var pronto = document.querySelector('#marco-video .pronto');
+    var hoy = new Date(), h = estreno.getHours(), m = estreno.getMinutes();
+    var hora = (h === 0 && m === 0) ? '' :
+      ' a las ' + ((h % 12) || 12) + (m ? ':' + ('0' + m).slice(-2) : '') + (h < 12 ? ' a. m.' : ' p. m.');
+    var esHoy = estreno.toDateString() === hoy.toDateString();
+    pronto.querySelector('h3').textContent = 'El video se estrena ' +
+      (esHoy ? 'hoy' : 'el ' + estreno.getDate() + ' de ' + meses[estreno.getMonth()]) + hora;
+    pronto.querySelector('p').textContent = (esHoy ? 'En unas horas' : 'Ese día') + ' lo verás aquí. Mientras, échale un ojo a las herramientas de arriba.';
+  } else if (c.videoYoutube) {
     var marco = document.getElementById('marco-video'); marco.innerHTML = '';
     var fr = document.createElement('iframe');
     fr.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(c.videoYoutube);
